@@ -1,7 +1,9 @@
 {
-  "name": "asmitraj-portfolio",
+  "name": "rishavraj-portfolio",
   "version": "0.1.0",
   "private": true,
+  "author": "Rishav Raj <rishavraj19595@gmail.com>",
+  "license": "MIT",
   "scripts": {
     "dev": "next dev",
     "build": "next build",

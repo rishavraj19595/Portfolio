@@ -27,12 +27,13 @@ async function saveMessageLocally(submission) {
   }
 }
 
-// Helper: Dispatch email in the background without blocking the HTTP response
-async function dispatchEmailNotification(submission) {
+// Helper: Dispatch email with timeout safety for serverless runtimes
+async function dispatchEmailNotification(submission, originUrl = "https://portfolio-rishav-156.netlify.app") {
   try {
     const user = process.env.EMAIL_USER;
     const pass = process.env.EMAIL_PASS;
 
+    // 1. Try Gmail SMTP if credentials provided
     if (user && pass) {
       try {
         const transporter = nodemailer.createTransport({
@@ -65,20 +66,21 @@ async function dispatchEmailNotification(submission) {
           `,
         });
         console.log(`[Nodemailer] Email sent successfully to ${DESTINATION_EMAIL}`);
-        return;
+        return { success: true, provider: "nodemailer" };
       } catch (nmErr) {
-        console.warn("[Nodemailer Error, forwarding via FormSubmit]:", nmErr.message);
+        console.warn("[Nodemailer Warning, falling back to FormSubmit]:", nmErr.message);
       }
     }
 
-    // Forward via FormSubmit.co
+    // 2. Fallback / Direct: Forward via FormSubmit.co with live valid origin
+    const validOrigin = originUrl.startsWith("http") ? originUrl : "https://portfolio-rishav-156.netlify.app";
     const res = await fetch(`https://formsubmit.co/ajax/${DESTINATION_EMAIL}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
-        Referer: "https://rishavraj-portfolio.local",
-        Origin: "https://rishavraj-portfolio.local",
+        Referer: `${validOrigin}/`,
+        Origin: validOrigin,
       },
       body: JSON.stringify({
         name: submission.name,
@@ -86,12 +88,17 @@ async function dispatchEmailNotification(submission) {
         message: submission.message,
         _subject: `🔔 New Portfolio Message from ${submission.name}`,
         _replyto: submission.email,
+        _template: "table",
+        _captcha: "false",
       }),
     });
+
     const data = await res.json();
-    console.log("[FormSubmit Forwarder] Dispatched notification:", data);
+    console.log("[FormSubmit Forwarder] Status:", res.status, "Response:", data);
+    return { success: true, provider: "formsubmit", data };
   } catch (err) {
-    console.warn("[Background Email Dispatch Warning]:", err.message);
+    console.warn("[Email Dispatch Warning]:", err.message);
+    return { success: false, error: err.message };
   }
 }
 
@@ -115,22 +122,28 @@ export async function POST(request) {
       submittedAt: new Date().toISOString(),
     };
 
-    // 1. Fast local file write (non-blocking)
-    saveMessageLocally(submission).catch((e) =>
-      console.error("[Async Save Error]:", e.message)
-    );
+    // Extract origin for FormSubmit Referer header
+    const reqOrigin = request.headers.get("origin") || request.headers.get("referer") || "https://portfolio-rishav-156.netlify.app";
 
-    // 2. Dispatch email notification in background (non-blocking, zero wait!)
-    dispatchEmailNotification(submission).catch((e) =>
-      console.error("[Async Email Error]:", e.message)
-    );
+    // 1. Fast local file write (graceful on read-only serverless filesystems)
+    saveMessageLocally(submission).catch(() => {});
 
-    // 3. Optional Redis backup (non-blocking)
+    // 2. Dispatch email notification - MUST BE AWAITED on serverless so function isn't frozen prematurely
+    try {
+      await Promise.race([
+        dispatchEmailNotification(submission, reqOrigin),
+        new Promise((resolve) => setTimeout(resolve, 4500)), // 4.5s safety cap
+      ]);
+    } catch (e) {
+      console.warn("[Email dispatch caught]:", e.message);
+    }
+
+    // 3. Optional Redis backup
     if (redis && redis.status === "ready") {
       redis.lpush("portfolio:contact_messages", JSON.stringify(submission)).catch(() => {});
     }
 
-    // 4. Return instant response immediately (< 20ms)
+    // 4. Return confirmed response
     return NextResponse.json({
       success: true,
       message: "Thank you! Your message has been sent. I'll get back to you soon.",

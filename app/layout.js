@@ -1,6 +1,5 @@
 import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
-import KeepAlive from "@/components/KeepAlive";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -50,7 +49,6 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`dark scroll-smooth ${inter.variable} ${jetbrainsMono.variable}`}>
       <body className="bg-[#050505] text-[#F5F5F5] antialiased selection:bg-red-900/40 selection:text-red-200">
-        <KeepAlive />
         {children}
       </body>
     </html>
