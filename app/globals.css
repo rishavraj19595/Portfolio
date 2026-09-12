@@ -1,0 +1,104 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg:          #050505;
+  --surface:     #0D0D0D;
+  --card:        #121212;
+  --foreground:  #F5F5F5;
+  --muted:       #8A8A8A;
+  --deep:        #8B0000;
+  --accent:      #DC2626;
+  --bright:      #EF4444;
+  --border:      #3F1111;
+  --border-hover:#6B1A1A;
+}
+
+html {
+  scroll-behavior: smooth;
+  color-scheme: dark;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--foreground);
+  font-family: var(--font-inter), system-ui, sans-serif;
+  overflow-x: hidden;
+}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar       { width: 6px; }
+::-webkit-scrollbar-track { background: #050505; }
+::-webkit-scrollbar-thumb { background: #3F1111; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #6B1A1A; }
+
+/* ── Background Grid ── */
+.bg-grid-pattern {
+  background-size: 40px 40px;
+  background-image:
+    linear-gradient(to right,  rgba(139,0,0,0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(139,0,0,0.06) 1px, transparent 1px);
+}
+
+/* ── Glow radials ── */
+.bg-radial-glow {
+  background: radial-gradient(circle at 50% 20%,
+    rgba(139,0,0,0.18),
+    rgba(220,38,38,0.07) 40%,
+    transparent 70%);
+}
+
+/* ── Glassmorphism ── */
+.glass-card {
+  background: rgba(18, 18, 18, 0.70);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid #3F1111;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+.glass-card:hover {
+  border-color: #6B1A1A;
+  box-shadow: 0 12px 40px -10px rgba(220,38,38,0.18);
+}
+
+.glass-nav {
+  background: rgba(5, 5, 5, 0.80);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid #3F1111;
+}
+
+/* ── Text Gradients ── */
+.text-gradient {
+  background: linear-gradient(135deg, #F5F5F5 0%, #c0c0c0 60%, #8A8A8A 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-cyan {
+  background: linear-gradient(135deg, #EF4444 0%, #DC2626 50%, #8B0000 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ── Glow border ── */
+.glow-border::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  background: linear-gradient(90deg, #8B0000, #DC2626, #EF4444);
+  border-radius: inherit;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.glow-border:hover::after { opacity: 1; }
+
+/* ── Float animation ── */
+@keyframes floatSlow {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50%       { transform: translateY(-10px) rotate(1deg); }
+}
+.animate-float-slow { animation: floatSlow 8s ease-in-out infinite; }
