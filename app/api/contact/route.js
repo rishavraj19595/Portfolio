@@ -28,7 +28,7 @@ async function saveMessageLocally(submission) {
 }
 
 // Helper: Dispatch email with timeout safety for serverless runtimes
-async function dispatchEmailNotification(submission, originUrl = "https://portfolio-rishav-156.netlify.app") {
+async function dispatchEmailNotification(submission, originUrl = "https://rishavraj-dev.netlify.app") {
   try {
     const user = process.env.EMAIL_USER;
     const pass = process.env.EMAIL_PASS;
@@ -72,8 +72,26 @@ async function dispatchEmailNotification(submission, originUrl = "https://portfo
       }
     }
 
-    // 2. Fallback / Direct: Forward via FormSubmit.co with live valid origin
-    const validOrigin = originUrl.startsWith("http") ? originUrl : "https://portfolio-rishav-156.netlify.app";
+    // 2. Netlify Forms backup (logs directly to Netlify project dashboard & email notification)
+    try {
+      const netlifyBody = new URLSearchParams({
+        "form-name": "contact",
+        name: submission.name,
+        email: submission.email,
+        message: submission.message,
+      });
+      await fetch("https://rishavraj-dev.netlify.app/", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: netlifyBody.toString(),
+      });
+      console.log("[Netlify Forms] Forwarded submission to Netlify Forms.");
+    } catch (nfErr) {
+      console.warn("[Netlify Forms Warning]:", nfErr.message);
+    }
+
+    // 3. Forward via FormSubmit.co with live valid origin
+    const validOrigin = originUrl.startsWith("http") ? originUrl : "https://rishavraj-dev.netlify.app";
     const res = await fetch(`https://formsubmit.co/ajax/${DESTINATION_EMAIL}`, {
       method: "POST",
       headers: {
@@ -123,7 +141,7 @@ export async function POST(request) {
     };
 
     // Extract origin for FormSubmit Referer header
-    const reqOrigin = request.headers.get("origin") || request.headers.get("referer") || "https://portfolio-rishav-156.netlify.app";
+    const reqOrigin = request.headers.get("origin") || request.headers.get("referer") || "https://rishavraj-dev.netlify.app";
 
     // 1. Fast local file write (graceful on read-only serverless filesystems)
     saveMessageLocally(submission).catch(() => {});
