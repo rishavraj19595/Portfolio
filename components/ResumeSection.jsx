@@ -34,30 +34,38 @@ export default function ResumeSection() {
 
             <div className="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-3 sm:gap-4 pt-4">
               <a
-                href={personalInfo.links.resume}
+                href={personalInfo.links.specializedResume}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-6 py-3.5 text-sm font-semibold text-white bg-gradient-to-r from-red-800 to-red-600 rounded-xl shadow-xl shadow-red-900/30 hover:shadow-red-700/40 hover:scale-[1.03] active:scale-[0.98] transition-all"
               >
-                <ExternalLink className="w-4 h-4" />
-                View General CV
-              </a>
-              <a
-                href={personalInfo.links.specializedResume}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-6 py-3.5 text-sm font-semibold text-[#F5F5F5] bg-[#0D0D0D] hover:bg-[#121212] border border-[#3F1111] hover:border-[#6B1A1A] rounded-xl transition-all hover:scale-[1.03] active:scale-[0.98] shadow-lg"
-              >
-                <Award className="w-4 h-4 text-red-500" />
+                <Award className="w-4 h-4" />
                 View Specialized CV
               </a>
               <a
                 href={personalInfo.links.resume}
-                download="Rishav_Raj_CV.pdf"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-6 py-3.5 text-sm font-semibold text-[#8A8A8A] hover:text-[#F5F5F5] bg-[#0D0D0D] hover:bg-[#121212] border border-[#3F1111] rounded-xl transition-all hover:scale-[1.03] active:scale-[0.98]"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-6 py-3.5 text-sm font-semibold text-[#F5F5F5] bg-[#0D0D0D] hover:bg-[#121212] border border-[#3F1111] hover:border-[#6B1A1A] rounded-xl transition-all hover:scale-[1.03] active:scale-[0.98] shadow-lg"
+              >
+                <ExternalLink className="w-4 h-4 text-red-500" />
+                View General CV
+              </a>
+              <a
+                href={personalInfo.links.specializedResume}
+                download="Rishav_Raj_Specialized_CV.pdf"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-5 py-3.5 text-sm font-semibold text-[#D4D4D4] hover:text-white bg-[#0D0D0D] hover:bg-[#121212] border border-[#3F1111] rounded-xl transition-all hover:scale-[1.03] active:scale-[0.98]"
               >
                 <FileDown className="w-4 h-4 text-red-500" />
-                Download PDF
+                Download Specialized CV
+              </a>
+              <a
+                href={personalInfo.links.resume}
+                download="Rishav_Raj_General_CV.pdf"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-5 py-3.5 text-sm font-semibold text-[#8A8A8A] hover:text-[#F5F5F5] bg-[#0D0D0D] hover:bg-[#121212] border border-[#3F1111] rounded-xl transition-all hover:scale-[1.03] active:scale-[0.98]"
+              >
+                <FileDown className="w-4 h-4 text-[#8A8A8A]" />
+                Download General CV
               </a>
             </div>
           </div>

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, FileDown, Code2 } from "lucide-react";
+import { Menu, X, FileDown, Code2, FileText, Award } from "lucide-react";
 import { personalInfo } from "@/data/portfolioData";
 
 const navItems = [
@@ -86,16 +86,25 @@ export default function Navbar() {
             })}
           </nav>
 
-          {/* Resume CTA */}
+          {/* Resume CTAs */}
           <div className="hidden sm:flex items-center gap-2">
             <a
               href={personalInfo.links.resume}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-4 py-2 text-xs font-semibold text-white bg-gradient-to-r from-red-800 to-red-600 rounded-lg shadow-lg shadow-red-900/30 hover:shadow-red-700/40 hover:scale-[1.02] active:scale-[0.98] transition-all"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-[#D4D4D4] hover:text-white bg-[#0D0D0D] border border-[#3F1111] hover:border-[#6B1A1A] rounded-lg transition-all hover:scale-[1.02] active:scale-[0.98]"
             >
-              <FileDown className="w-4 h-4" />
-              CV Download
+              <FileText className="w-3.5 h-3.5 text-red-400" />
+              General CV
+            </a>
+            <a
+              href={personalInfo.links.specializedResume}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-white bg-gradient-to-r from-red-800 to-red-600 rounded-lg shadow-lg shadow-red-900/30 hover:shadow-red-700/40 hover:scale-[1.02] active:scale-[0.98] transition-all"
+            >
+              <Award className="w-3.5 h-3.5" />
+              Specialized CV
             </a>
           </div>
 

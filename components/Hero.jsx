@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { Github, Linkedin, Mail, ArrowRight, FileDown, MapPin, Code2, Award } from "lucide-react";
+import { Github, Linkedin, Mail, ArrowRight, FileDown, MapPin, Code2, Award, FileText } from "lucide-react";
 import { personalInfo } from "@/data/portfolioData";
 
 export default function Hero() {
@@ -111,10 +111,19 @@ export default function Hero() {
                 href={personalInfo.links.resume}
                 target="_blank"
                 rel="noopener noreferrer"
+                className="w-full sm:w-auto justify-center inline-flex items-center gap-2 px-5 py-3 text-sm font-semibold text-[#8A8A8A] hover:text-[#F5F5F5] border border-[#3F1111] hover:border-[#6B1A1A] bg-[#0D0D0D]/60 hover:bg-[#121212] rounded-xl transition-all hover:scale-[1.02] active:scale-[0.98]"
+              >
+                <FileText className="w-4 h-4 text-red-500" />
+                General CV
+              </a>
+              <a
+                href={personalInfo.links.specializedResume}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="w-full sm:w-auto justify-center inline-flex items-center gap-2 px-5 py-3 text-sm font-semibold text-red-400 border border-red-950 bg-red-950/20 hover:bg-red-950/40 rounded-xl transition-all hover:scale-[1.02] active:scale-[0.98]"
               >
-                <FileDown className="w-4 h-4 text-red-500" />
-                CV
+                <Award className="w-4 h-4 text-red-500" />
+                Specialized CV
               </a>
             </motion.div>
 
